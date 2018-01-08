@@ -5,6 +5,7 @@ const program = require('commander')
 const _ = require('lodash')
 const path = require('path')
 const pkg = require('./package.json')
+const { list } = require('./libs')
 const version = pkg.version
 const basename = path.basename(process.env._)
 
@@ -14,6 +15,12 @@ program
 program
   .name(basename === 'node' ? 'node-ssh' : basename)
   .usage('[command] [options]')
+
+program
+  .command('list')
+  .alias('ls')
+  .description('Show ssh key list')
+  .action( list )
 
 // Parse and fallback to help if no args
 if (_.isEmpty(program.parse(process.argv).args) && process.argv.length === 2) {
