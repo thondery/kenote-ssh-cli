@@ -1,0 +1,18 @@
+{
+  "name": "kenote-ssh-cli",
+  "version": "1.0.0",
+  "description": "own ssh command line tools ...",
+  "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "kssh": "index.js",
+    "node-ssh": "index.js"
+  },
+  "dependencies": {
+    "commander": "^2.12.2",
+    "inquirer": "^4.0.2"
+  },
+  "repository": "https://github.com/thondery/kenote-ssh-cli.git",
+  "author": "thondery <thondery@163.com>",
+  "license": "MIT"
+}
