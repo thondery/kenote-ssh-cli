@@ -5,8 +5,8 @@
   "main": "index.js",
   "preferGlobal": true,
   "bin": {
-    "kssh": "index.js",
-    "node-ssh": "index.js"
+    "kssh": "./bin/kssh",
+    "node-ssh": "./bin/kssh"
   },
   "dependencies": {
     "commander": "^2.12.2",
