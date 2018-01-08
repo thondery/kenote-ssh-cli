@@ -8,9 +8,19 @@
     "kssh": "./bin/index.js",
     "node-ssh": "./bin/index.js"
   },
+  "scripts": {
+    "test": "nyc --report-dir=\"coverage/cli\" mocha --reporter spec --bail --check-leaks tests/",
+    "test-ci": "nyc --report-dir=\"coverage/cli\" mocha --reporter spec --check-leaks tests/",
+    "report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov"
+  },
   "dependencies": {
     "commander": "^2.12.2",
     "inquirer": "^4.0.2"
+  },
+  "devDependencies": {
+    "codecov": "^3.0.0",
+    "mocha": "^4.1.0",
+    "nyc": "^11.4.1"
   },
   "repository": "https://github.com/thondery/kenote-ssh-cli.git",
   "author": "thondery <thondery@163.com>",
