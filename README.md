@@ -27,6 +27,12 @@ own ssh command line tools ...
 $ npm i -g kenote-ssh-cli
 ```
 
+## Features
+
+- list|ls, Show ssh key list
+- create|add, Create a new SSH key
+- remove|delete, Delete specific SSH key by alias name
+
 ## License
 
 this repo is released under the [MIT License](https://github.com/thondery/kenote-ssh-cli/blob/master/LICENSE).
