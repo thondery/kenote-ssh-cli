@@ -4,7 +4,7 @@ const runscript = require('runscript')
 const path = require('path')
 const fs = require('fs-extra')
 const _ = require('lodash')
-const { sshRoot, getList, saveConfig } = require('./base')
+const { sshRoot, getList, saveConfig, defaultCommit } = require('./base')
 
 const setting = [
   {
@@ -100,7 +100,9 @@ const create = () => {
         type: 'input',
         name: 'comment',
         message: 'Input Comment: ',
-
+        ...defaultCommit ? {
+          default: defaultCommit
+        } : null
       }
     ])
   })

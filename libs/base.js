@@ -1,11 +1,15 @@
 
 const path = require('path')
 const fs = require('fs-extra')
+const ini = require('ini')
 
 exports.sshRoot = path.resolve(process.env.HOME || process.env.HOMEPATH, '.ssh')
 
 exports.getList = () => {
   let sshRootInfo = fs.readdirSync(exports.sshRoot)
+  if (!fs.existsSync(path.resolve(exports.sshRoot, 'config'))) {
+    return []
+  }
   let sshConfig = fs.readFileSync(path.resolve(exports.sshRoot, 'config'), 'utf-8')
   let sshConfigArr = sshConfig.split(/(Host)[\s+]/)
   let sshConfigTable = []
@@ -31,6 +35,20 @@ exports.saveConfig = (config) => {
   }
   fs.writeFileSync(path.resolve(exports.sshRoot, 'config'), infoData, 'utf-8')
 }
+
+const getCommit = () => {
+  let gitConfigFile = path.resolve(process.env.HOME || process.env.HOMEPATH, '.gitconfig')
+  let gitConfig = {}
+  if (fs.existsSync(gitConfigFile)) {
+    gitConfig = ini.parse(fs.readFileSync(gitConfigFile, 'utf-8'))
+    if (gitConfig.user) {
+      return `${gitConfig.user.name} <${gitConfig.user.email}>`
+    }
+  }
+  return null
+}
+
+exports.defaultCommit = getCommit()
 
 const getInfo = (data) => {
   let info = null
