@@ -5,7 +5,7 @@ const program = require('commander')
 const _ = require('lodash')
 const path = require('path')
 const pkg = require('./package.json')
-const { list, create, remove } = require('./libs')
+const { list, create, remove, upload, connect, backup } = require('./libs')
 const version = pkg.version
 const basename = path.basename(process.env._)
 
@@ -33,6 +33,25 @@ program
   .alias('delete')
   .description('Delete specific SSH key by alias name')
   .action( remove )
+
+program
+  .command('upload')
+  .alias('up')
+  .description('Upload SSH key to the server')
+  .action( upload )
+
+program
+  .command('connect')
+  .alias('link')
+  .description('Connect to the server')
+  .action( connect )
+
+program
+  .command('backup')
+  .alias('bak')
+  .option('-y, --yes ', 'Confirm the implementation ...')
+  .description('Backup SSH key ...')
+  .action( () => backup(program.args[0].yes) )
 
 // Parse and fallback to help if no args
 if (_.isEmpty(program.parse(process.argv).args) && process.argv.length === 2) {
