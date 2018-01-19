@@ -3,11 +3,12 @@ const path = require('path')
 const fs = require('fs-extra')
 const moment = require('moment')
 const inquirer = require('inquirer')
-const { compression, sshRoot, getList } = require('./base')
+const { compression, sshRoot, getList, init } = require('./base')
 const backupDir = path.resolve(process.env.HOME || process.env.HOMEPATH, '.kssh')
 
 module.exports = (yes = false) => {
   let options = null
+  init()
   if (yes) return backup()
   return inquirer.prompt([
     {

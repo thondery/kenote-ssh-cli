@@ -4,10 +4,11 @@ const runscript = require('runscript')
 const path = require('path')
 const fs = require('fs-extra')
 const _ = require('lodash')
-const { sshRoot, getList, saveConfig } = require('./base')
+const { sshRoot, getList, saveConfig, init } = require('./base')
 
 const remove = () => {
   let options = null
+  init()
   let sshList = getList()
   return inquirer.prompt([
     {

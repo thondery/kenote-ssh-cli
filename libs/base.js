@@ -5,7 +5,6 @@ const ini = require('ini')
 const archiver = require('archiver')
 const _ = require('lodash')
 const bytes = require('bytes')
-const async = require('async')
 const ora = require('ora')
 
 const defaultArchiveOptions = {
@@ -20,6 +19,10 @@ const defaultArchiveOptions = {
 }
 
 exports.sshRoot = path.resolve(process.env.HOME || process.env.HOMEPATH, '.ssh')
+
+exports.init = () => {
+  !fs.existsSync(exports.sshRoot) && fs.mkdirpSync(exports.sshRoot)
+}
 
 exports.getList = () => {
   let sshRootInfo = fs.readdirSync(exports.sshRoot)

@@ -2,10 +2,11 @@
 const inquirer = require('inquirer')
 const runscript = require('runscript')
 const _ = require('lodash')
-const { getList } = require('./base')
+const { getList, init } = require('./base')
 
 module.exports = () => {
   let options = null
+  init()
   let sshList = getList()
   return inquirer.prompt([
     {

@@ -5,7 +5,7 @@ const program = require('commander')
 const _ = require('lodash')
 const path = require('path')
 const pkg = require('./package.json')
-const { list, create, remove, upload, connect, backup } = require('./libs')
+const { list, create, remove, upload, connect, backup, restore } = require('./libs')
 const version = pkg.version
 const basename = path.basename(process.env._)
 
@@ -52,6 +52,12 @@ program
   .option('-y, --yes ', 'Confirm the implementation ...')
   .description('Backup SSH key ...')
   .action( () => backup(program.args[0].yes) )
+
+program
+  .command('restore')
+  .alias('unbak')
+  .description('Restore SSH key ...')
+  .action( restore )
 
 // Parse and fallback to help if no args
 if (_.isEmpty(program.parse(process.argv).args) && process.argv.length === 2) {

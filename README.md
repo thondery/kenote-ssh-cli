@@ -32,6 +32,34 @@ $ npm i -g kenote-ssh-cli
 - list|ls, Show ssh key list
 - create|add, Create a new SSH key
 - remove|delete, Delete specific SSH key by alias name
+- upload|up, Upload SSH key to the server
+- connect|link, Connect to the server
+- backup|bak, Backup SSH key
+- restore|unbak, Restore SSH key
+
+
+```bash
+$ kssh
+
+  Usage: kssh [command] [options]
+
+
+  Options:
+
+    -V, --version  output the version number
+    -h, --help     output usage information
+
+
+  Commands:
+
+    list|ls                Show ssh key list
+    create|add             Create a new SSH key
+    remove|delete          Delete specific SSH key by alias name
+    upload|up              Upload SSH key to the server
+    connect|link           Connect to the server
+    backup|bak [options]   Backup SSH key ...
+    restore|unbak          Restore SSH key ...
+```
 
 ## License
 

@@ -1,8 +1,9 @@
 
 const Table = require('cli-table2')
-const { sshRoot, getList } = require('./base')
+const { sshRoot, getList, init } = require('./base')
 
 module.exports = () => {
+  init()
   let list = getList()
   console.log('')
   let table = new Table({

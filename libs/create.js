@@ -4,7 +4,7 @@ const runscript = require('runscript')
 const path = require('path')
 const fs = require('fs-extra')
 const _ = require('lodash')
-const { sshRoot, getList, saveConfig, defaultCommit } = require('./base')
+const { sshRoot, getList, saveConfig, defaultCommit, init } = require('./base')
 
 const setting = [
   {
@@ -26,6 +26,7 @@ const setting = [
 
 const create = () => {
   let options = null
+  init()
   return inquirer.prompt([
     {
       type: 'input',
