@@ -37,6 +37,7 @@ $ npm i -g kenote-ssh-cli
 - backup|bak, Backup SSH key
 - restore|unbak, Restore SSH key
 
+### Usages
 
 ```bash
 $ kssh
