@@ -7,7 +7,7 @@ const path = require('path')
 const pkg = require('./package.json')
 const { list, create, remove, upload, connect, backup, restore } = require('./libs')
 const version = pkg.version
-const basename = path.basename(process.env._)
+const basename = path.basename(process.env._ || process.title.replace(/^(\S+)(\s\-\s)(\S+)$/, '$3'))
 
 program
   .version(version)

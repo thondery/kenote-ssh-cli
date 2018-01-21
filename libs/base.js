@@ -122,10 +122,10 @@ const getInfo = (data) => {
     let arr = data.split(/\n/)
     arr.map( (item, i) => {
       if (/Host\s/.test(item)) {
-        info['Host'] = item.replace(/Host(?=\s)/, '').replace(/\s/g, '')
+        info['Host'] = item.replace(/Host(?=\s)/, '').replace(/(\s|\r)/g, '')
       }
       else if (i === 0) {
-        info['Host'] = item
+        info['Host'] = item.replace(/(\s|\r)/g, '')
       }
       if (/HostName/.test(item)) {
         info['HostName'] = item.replace(/HostName(?=\s)/, '').replace(/\s/g, '')
