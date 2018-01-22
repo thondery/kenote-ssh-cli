@@ -19,8 +19,15 @@ program
 program
   .command('list')
   .alias('ls')
+  .option('-g, --git ', 'Only show git related')
+  .option('-i, --ignore', 'Ignore show git related')
   .description('Show ssh key list')
-  .action( list )
+  .action( () => {
+    let type = 'all'
+    if (program.args[0].git) type = 'git'
+    if (program.args[0].ignore) type = 'ignore'
+    list(type)
+  })
 
 program
   .command('create')

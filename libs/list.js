@@ -1,10 +1,18 @@
 
+const _ = require('lodash')
 const Table = require('cli-table2')
 const { sshRoot, getList, init } = require('./base')
 
-module.exports = () => {
+module.exports = (type = 'all') => {
   init()
   let list = getList()
+  if (type === 'git') {
+    list = _.filter(list, o => o.User === 'git')
+  }
+  if (type === 'ignore') {
+    list = _.filter(list, o => o.User !== 'git')
+    console.log(type)
+  }
   console.log('')
   let table = new Table({
     head: ['Name', 'Host', 'Port', 'User', 'IdentityFile'],

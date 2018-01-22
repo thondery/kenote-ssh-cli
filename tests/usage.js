@@ -49,6 +49,17 @@ describe('Usage Testing: ', () => {
     })
   })
 
+  describe('\n    Command -> list \n', () => {
+
+    it('should usage list', function (done) {
+      run(null, ['ls'], function (err, stdout) {
+        if (err) return done(err)
+        assert.equal(err, null)
+        done()
+      })
+    })
+  })
+
 })
 
 function run(dir, args, callback) {
