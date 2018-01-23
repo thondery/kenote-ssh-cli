@@ -20,7 +20,7 @@ module.exports = () => {
     options = ret
     let opts = _.find(sshList, o => o.Host === ret.alias)
     let remoteHost = `${opts.User}@${opts.HostName}`
-    if (opts.Port && opts.Port !== 22) {
+    if (opts.Port && opts.Port != 22) {
       remoteHost += `:${opts.Port}`
     }
     runscript(`ssh-copy-id -i ${opts.IdentityFile}.pub ${remoteHost}`)
