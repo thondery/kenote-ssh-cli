@@ -9,7 +9,7 @@ const ora = require('ora')
 const { compression, sshRoot, getList, ksshRoot, isInitial } = require('./base')
 
 module.exports = () => {
-  if (!isInitial) return
+  if (!isInitial()) return
   let bakList = _.filter(fs.readdirSync(ksshRoot), o => /\.(zip|tar)$/.test(o))
   if (bakList.length === 0) {
     return console.log('\n   Did not find the backup file, please backup ssh key !\n')

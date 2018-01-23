@@ -9,7 +9,7 @@ const { sshRoot, getList, saveConfig, defaultCommit, isInitial, repository } = r
 
 const create = (sshName) => {
   let options = null
-  if (!isInitial) return
+  if (!isInitial()) return
   let repositoryType = _.keys(repository)
   return (sshName ? 
     new Promise((resolve, reject) => {

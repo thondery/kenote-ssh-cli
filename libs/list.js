@@ -4,7 +4,7 @@ const Table = require('cli-table2')
 const { sshRoot, getList, isInitial } = require('./base')
 
 module.exports = (type = 'all') => {
-  if (!isInitial) return
+  if (!isInitial()) return
   let list = getList()
   if (type === 'git') {
     list = _.filter(list, o => o.User === 'git')

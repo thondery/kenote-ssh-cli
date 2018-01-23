@@ -22,14 +22,14 @@ var homePath = process.env.HOME || process.env.HOMEPATH
 exports.sshRoot = path.resolve(homePath, '.ssh')
 exports.ksshRoot = path.resolve(homePath, '.kssh')
 
-exports.isInitial = (() => {
+exports.isInitial = () => {
   !fs.existsSync(exports.sshRoot) && fs.mkdirpSync(exports.sshRoot)
   if (!fs.existsSync(path.resolve(exports.ksshRoot, 'config'))) {
     console.log(`\n    Please initialize the configuration !\n`)
     return false
   }
   return true
-})()
+}
 
 exports.repository = (() => {
   let config

@@ -1,6 +1,6 @@
 {
   "name": "kenote-ssh-cli",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "own ssh command line tools ...",
   "main": "index.js",
   "preferGlobal": true,
@@ -33,6 +33,9 @@
     "codecov": "^3.0.0",
     "mocha": "^4.1.0",
     "nyc": "^11.4.1"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   },
   "repository": "https://github.com/thondery/kenote-ssh-cli.git",
   "author": "thondery <thondery@163.com>",

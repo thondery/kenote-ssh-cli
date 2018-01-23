@@ -8,7 +8,7 @@ const { compression, sshRoot, getList, isInitial, ksshRoot } = require('./base')
 
 module.exports = () => {
   let options = null
-  if (!isInitial) return
+  if (!isInitial()) return
   return inquirer.prompt([
     {
       type: 'input',

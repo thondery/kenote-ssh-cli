@@ -9,7 +9,7 @@ const { sshRoot, getList, saveConfig, isInitial, ksshRoot } = require('./base')
 
 const removeSSHKey = () => {
   let options = null
-  if (!isInitial) return
+  if (!isInitial()) return
   let sshList = getList()
   return inquirer.prompt([
     {
@@ -66,7 +66,7 @@ const removeSSHKey = () => {
 
 const removeBackup = () => {
   let options = null
-  if (!isInitial) return
+  if (!isInitial()) return
   let bakList = _.filter(fs.readdirSync(ksshRoot), o => /\.(zip|tar)$/.test(o))
   inquirer.registerPrompt('checkbox-autocomplete', require('inquirer-checkbox-autocomplete-prompt'))
   return inquirer.prompt([

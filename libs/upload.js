@@ -6,7 +6,7 @@ const { getList, isInitial } = require('./base')
 
 module.exports = () => {
   let options = null
-  if (!isInitial) return
+  if (!isInitial()) return
   let sshList = _.filter(getList(), o => o.User !== 'git')
   return inquirer.prompt([
     {
