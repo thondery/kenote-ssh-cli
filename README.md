@@ -29,6 +29,7 @@ $ npm i -g kenote-ssh-cli
 
 ## Features
 
+- init, Initial node-ssh Configure
 - list|ls, Show ssh key list
 - create|add, Create a new SSH key
 - remove|delete, Delete specific SSH key by alias name
@@ -37,7 +38,7 @@ $ npm i -g kenote-ssh-cli
 - backup|bak, Backup SSH key
 - restore|unbak, Restore SSH key
 
-### Usages
+## Usages
 
 ```bash
 $ kssh

@@ -3,13 +3,21 @@ const assert = require('assert')
 const exec = require('child_process').exec
 const spawn = require('child_process').spawn
 const path = require('path')
+const mocha = require('mocha')
+const rimraf = require('rimraf')
 const pkg = require('../package.json')
 
 const binPath = path.resolve(__dirname, '../bin/index.js')
+const tempDir = path.resolve(__dirname, '../temp')
 
 describe('Usage Testing: ', () => {
 
-  describe('\n    Command -> help \n', () => {
+  mocha.after(function (done) {
+    this.timeout(30000)
+    cleanup(tempDir, done)
+  })
+
+  describe('\n    Options \n', () => {
 
     it('should usage --help', function (done) {
       run(null, ['--help'], function (err, stdout) {
@@ -19,17 +27,6 @@ describe('Usage Testing: ', () => {
       })
     })
 
-    it('should usage -h', function (done) {
-      run(null, ['-h'], function (err, stdout) {
-        if (err) return done(err)
-        assert.equal(err, null)
-        done()
-      })
-    })
-  })
-
-  describe('\n    Command -> version \n', () => {
-
     it('should usage --version', function (done) {
       run(null, ['--version'], function (err, stdout) {
         if (err) return done(err)
@@ -38,12 +35,14 @@ describe('Usage Testing: ', () => {
         done()
       })
     })
+  })
 
-    it('should usage -V', function (done) {
-      run(null, ['-V'], function (err, stdout) {
+  describe('\n    Command -> init \n', () => {
+
+    it('should usage init', function (done) {
+      run(null, ['init -p temp'], function (err, stdout) {
         if (err) return done(err)
         assert.equal(err, null)
-        assert.equal(stdout, `${pkg.version}\n`)
         done()
       })
     })
@@ -58,9 +57,36 @@ describe('Usage Testing: ', () => {
         done()
       })
     })
+
+    it('should usage list --git', function (done) {
+      run(null, ['ls -g'], function (err, stdout) {
+        if (err) return done(err)
+        assert.equal(err, null)
+        done()
+      })
+    })
+
+    it('should usage list --ignore', function (done) {
+      run(null, ['ls -i'], function (err, stdout) {
+        if (err) return done(err)
+        assert.equal(err, null)
+        done()
+      })
+    })
   })
 
 })
+
+function cleanup(dir, callback) {
+  if (typeof dir === 'function') {
+    callback = dir
+    dir = tempDir
+  }
+  callback(null)
+  /*rimraf(tempDir, function (err) {
+    callback(err)
+  })*/
+}
 
 function run(dir, args, callback) {
   var argv = [binPath].concat(args)

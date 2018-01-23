@@ -18,11 +18,29 @@ const defaultArchiveOptions = {
   files: []
 }
 
-exports.sshRoot = path.resolve(process.env.HOME || process.env.HOMEPATH, '.ssh')
+var homePath = process.env.HOME || process.env.HOMEPATH
+exports.sshRoot = path.resolve(homePath, '.ssh')
+exports.ksshRoot = path.resolve(homePath, '.kssh')
 
-exports.init = () => {
+exports.isInitial = (() => {
   !fs.existsSync(exports.sshRoot) && fs.mkdirpSync(exports.sshRoot)
-}
+  if (!fs.existsSync(path.resolve(exports.ksshRoot, 'config'))) {
+    console.log(`\n    Please initialize the configuration !\n`)
+    return false
+  }
+  return true
+})()
+
+exports.repository = (() => {
+  let configIni = fs.readFileSync(path.resolve(exports.ksshRoot, 'config'), 'utf-8')
+  let config
+  try {
+    config = ini.parse(configIni)
+    return config.repository
+  } catch (error) {
+    return undefined
+  }
+})()
 
 exports.getList = () => {
   let sshRootInfo = fs.readdirSync(exports.sshRoot)
@@ -75,7 +93,7 @@ exports.compression = (opts) => {
     options: { ...defaultArchiveOptions.options, ...opts.options },
     files: [ ...defaultArchiveOptions.files, ...opts.files ]
   }
-  console.log('\n  Zipping to %s\n', opts.archive.output)
+  console.log('\n     Zipping to %s\n', opts.archive.output)
   let archive = archiver(opts.archive.format, opts.options)
   let output = fs.createWriteStream(opts.archive.output)
   let spinner = ora('Loading unicorns').start()
@@ -93,7 +111,7 @@ exports.compression = (opts) => {
     let archiveSize = archive.pointer()
     setTimeout(() => {
       spinner.stop()
-      console.log('  Complete Zipping, Archiver wrote %s !\n', bytes(archiveSize))
+      console.log('✔   Complete Zipping, Archiver wrote %s !\n', bytes(archiveSize))
     }, 500)
   })
   archive.pipe(output)
@@ -121,22 +139,22 @@ const getInfo = (data) => {
     info = {}
     let arr = data.split(/\n/)
     arr.map( (item, i) => {
-      if (/Host\s/.test(item)) {
+      if (/Host(?=\s)/.test(item)) {
         info['Host'] = item.replace(/Host(?=\s)/, '').replace(/(\s|\r)/g, '')
       }
       else if (i === 0) {
         info['Host'] = item.replace(/(\s|\r)/g, '')
       }
-      if (/HostName/.test(item)) {
+      if (/HostName(?=\s)/.test(item)) {
         info['HostName'] = item.replace(/HostName(?=\s)/, '').replace(/\s/g, '')
       }
-      if (/User/.test(item)) {
+      if (/User(?=\s)/.test(item)) {
         info['User'] = item.replace(/User(?=\s)/, '').replace(/\s/g, '')
       }
       if (/Port/.test(item)) {
         info['Port'] = item.replace(/Port(?=\s)/, '').replace(/\s/g, '')
       }
-      if (/IdentityFile/.test(item)) {
+      if (/IdentityFile(?=\s)/.test(item)) {
         info['IdentityFile'] = item.replace(/IdentityFile(?=\s)/, '').replace(/\s/g, '')
       }
     })

@@ -3,38 +3,26 @@ const inquirer = require('inquirer')
 const runscript = require('runscript')
 const path = require('path')
 const fs = require('fs-extra')
+const ora = require('ora')
 const _ = require('lodash')
-const { sshRoot, getList, saveConfig, defaultCommit, init } = require('./base')
+const { sshRoot, getList, saveConfig, defaultCommit, isInitial, repository } = require('./base')
 
-const setting = [
-  {
-    type: 'github',
-    host: 'github.com',
-    user: 'git'
-  },
-  {
-    type: 'coding',
-    host: 'git.coding.net',
-    user: 'git'
-  },
-  {
-    type: 'oschina',
-    host: 'git.oschina.net',
-    user: 'git'
-  },
-]
-
-const create = () => {
+const create = (sshName) => {
   let options = null
-  init()
-  return inquirer.prompt([
-    {
-      type: 'input',
-      name: 'name',
-      message: 'input Name: ',
-      validate: validName
-    },
-  ])
+  if (!isInitial) return
+  let repositoryType = _.keys(repository)
+  return (sshName ? 
+    new Promise((resolve, reject) => {
+      resolve({ name: sshName })
+    }) : inquirer.prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'input Name: ',
+        validate: validName
+      },
+    ])
+  )
   .then( ret => {
     options = { ...options, ...ret }
     if (fs.existsSync(path.resolve(sshRoot, options.name))) {
@@ -57,14 +45,19 @@ const create = () => {
       fs.removeSync(path.resolve(sshRoot, options.name))
       fs.removeSync(path.resolve(sshRoot, `${options.name}.pub`))
     }
-    return inquirer.prompt([
-      {
-        type: 'list',
-        name: 'type',
-        message: 'Choose a type from the options below: ',
-        choices: ['1) github', '2) coding', '3) oschina', '4) customize']
-      }
-    ])
+    if (repositoryType.length > 0) {
+      return inquirer.prompt([
+        {
+          type: 'list',
+          name: 'type',
+          message: 'Choose a type from the options below: ',
+          choices: [..._.keys(repository), 'customize']
+        }
+      ])
+    }
+    else {
+      return { type: 'customize' }
+    }
   })
   .then( ret => {
     options = { ...options, ...ret }
@@ -92,7 +85,7 @@ const create = () => {
         }
       ])
     }
-    return _.find(setting, o => o.type === options.type.replace(/^\d\)\s+/, ''))
+    return repository[options.type]
   })
   .then( ret => {
     options = { ...options, ...ret }
@@ -112,31 +105,37 @@ const create = () => {
     if (!_.isEmpty(ret.comment)) {
       comment = `-C "${ret.comment}" `
     }
-    return runscript(`ssh-keygen -t rsa ${comment}-f ~/.ssh/${options.name}`)
+    let sshFile = path.resolve(sshRoot, options.name)
+    return runscript(`ssh-keygen -t rsa ${comment}-f ${sshFile}`)
   })
   .then( ret => {
     let plus = {}
     if (options.port && (options.port !== 0 || options.port !== 22)) {
       plus['Port'] = options.port
     }
+    console.log('')
+    let spinner = ora('    Create SSH key ...').start()
+    let sshFile = path.resolve(sshRoot, options.name)
     let list = [ 
-      ...getList(), 
+      ..._.filter(getList(), o => o.Host !== options.name), 
       {
         Host: options.name,
         HostName: options.host,
         User: options.user,
         ...plus,
-        IdentityFile: `~/.ssh/${options.name}`
+        IdentityFile: sshFile
       }
     ]
     saveConfig(list)
-    console.info(`✔ create [${options.name}] ssh key successfully!`)
+    setTimeout(() => {
+      spinner.stop()
+      console.log(`\n✔    create [${options.name}] SSH key successfully!\n`)
+    }, 500)
   })
   .catch( err => {
     process.exit(0)
   })
 }
-
 
 const validName = (value) => {
   if (_.isEmpty(value.replace(/\s+/, ''))) {

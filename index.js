@@ -5,7 +5,7 @@ const program = require('commander')
 const _ = require('lodash')
 const path = require('path')
 const pkg = require('./package.json')
-const { list, create, remove, upload, connect, backup, restore } = require('./libs')
+const { list, create, remove, upload, connect, backup, restore, init } = require('./libs')
 const version = pkg.version
 const basename = path.basename(process.env._ || process.title.replace(/^(\S+)(\s\-\s)(\S+)$/, '$3'))
 
@@ -15,6 +15,11 @@ program
 program
   .name(basename === 'node' ? 'node-ssh' : basename)
   .usage('[command] [options]')
+
+program
+  .command('init')
+  .description(`Initial ${basename === 'node' ? 'node-ssh' : basename} Configure`)
+  .action( init )
 
 program
   .command('list')
@@ -32,14 +37,19 @@ program
 program
   .command('create')
   .alias('add')
+  .option('-n, --name <ssh-name>', 'Input SSH key name')
   .description('Create a new SSH key')
-  .action( create )
+  .action( () => {
+    let name = _.has(program.args[0], 'name') ? program.args[0].name : undefined
+    create(name)
+  } )
 
 program
   .command('remove')
-  .alias('delete')
-  .description('Delete specific SSH key by alias name')
-  .action( remove )
+  .alias('rm')
+  .option('-b, --bak', 'Select the backup directory')
+  .description('Delete ssh key or backup file')
+  .action( () => remove(program.args[0].bak) )
 
 program
   .command('upload')
@@ -56,7 +66,6 @@ program
 program
   .command('backup')
   .alias('bak')
-  .option('-y, --yes ', 'Confirm the implementation ...')
   .description('Backup SSH key ...')
   .action( () => backup(program.args[0].yes) )
 

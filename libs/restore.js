@@ -6,16 +6,13 @@ const _ = require('lodash')
 const fuzzy = require('fuzzy')
 const unzip = require('unzip')
 const ora = require('ora')
-const { compression, sshRoot, getList } = require('./base')
-const backupDir = path.resolve(process.env.HOME || process.env.HOMEPATH, '.kssh')
+const { compression, sshRoot, getList, ksshRoot, isInitial } = require('./base')
 
 module.exports = () => {
-  if (!fs.existsSync(backupDir)) {
-    return console.log('\n  Did not find the backup file, please backup ssh key !\n')
-  }
-  let bakList = _.filter(fs.readdirSync(backupDir), o => /\.(zip|tar)$/.test(o))
+  if (!isInitial) return
+  let bakList = _.filter(fs.readdirSync(ksshRoot), o => /\.(zip|tar)$/.test(o))
   if (bakList.length === 0) {
-    return console.log('\n  Did not find the backup file, please backup ssh key !\n')
+    return console.log('\n   Did not find the backup file, please backup ssh key !\n')
   }
   inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'))
   return inquirer.prompt([
@@ -24,18 +21,18 @@ module.exports = () => {
       name: 'backup',
       message: 'Choose a backup file to restore: ',
       source: searchFood,
-      pageSize: 4,
-      validate: (val) => {
+      pageSize: 10,
+      /*validate: (val) => {
         return val
           ? true
           : 'Type something!';
-      }
+      }*/
     }
   ])
   .then( ret => {
     console.log('\n  Restore Backup file %s ...\n', ret.backup)
     let spinner = ora('Loading unicorns').start()
-    fs.createReadStream(path.resolve(backupDir, ret.backup))
+    fs.createReadStream(path.resolve(ksshRoot, ret.backup))
       .pipe(unzip.Extract({ path: sshRoot }))
     setTimeout(() => {
       spinner.stop()

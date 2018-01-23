@@ -2,17 +2,17 @@
 const inquirer = require('inquirer')
 const runscript = require('runscript')
 const _ = require('lodash')
-const { getList, init } = require('./base')
+const { getList, isInitial } = require('./base')
 
 module.exports = () => {
   let options = null
-  init()
-  let sshList = getList()
+  if (!isInitial) return
+  let sshList = _.filter(getList(), o => o.User !== 'git')
   return inquirer.prompt([
     {
       type: 'list',
       name: 'alias',
-      message: 'Select Alias: ',
+      message: 'Please select ssh key alias name ?',
       choices: _.map(sshList, 'Host')
     }
   ])
