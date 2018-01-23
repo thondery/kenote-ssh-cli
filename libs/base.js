@@ -32,9 +32,9 @@ exports.isInitial = (() => {
 })()
 
 exports.repository = (() => {
-  let configIni = fs.readFileSync(path.resolve(exports.ksshRoot, 'config'), 'utf-8')
   let config
   try {
+    let configIni = fs.readFileSync(path.resolve(exports.ksshRoot, 'config'), 'utf-8')
     config = ini.parse(configIni)
     return config.repository
   } catch (error) {
