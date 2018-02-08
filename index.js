@@ -5,7 +5,7 @@ const program = require('commander')
 const _ = require('lodash')
 const path = require('path')
 const pkg = require('./package.json')
-const { list, create, remove, upload, connect, backup, restore, init } = require('./libs')
+const { init, list, create } = require('./build/main')
 const version = pkg.version
 const basename = path.basename(process.env._ || process.title.replace(/^(\S+)(\s\-\s)(\S+)$/, '$3'))
 
@@ -24,26 +24,25 @@ program
 program
   .command('list')
   .alias('ls')
-  .option('-g, --git ', 'Only show git related')
-  .option('-i, --ignore', 'Ignore show git related')
-  .description('Show ssh key list')
+  .option('-t, --type <type-name>', 'Only relevant types are displayed')
+  .description('Show ssh-key list')
   .action( () => {
-    let type = 'all'
-    if (program.args[0].git) type = 'git'
-    if (program.args[0].ignore) type = 'ignore'
-    list(type)
+    list(program.args[0].type || 'all')
   })
 
 program
   .command('create')
   .alias('add')
-  .option('-n, --name <ssh-name>', 'Input SSH key name')
+  //.option('-n, --name <ssh-name>', 'Input SSH key name')
+  .option('-t, --type <ssh-type>', 'Input SSH key type')
   .description('Create a new SSH key')
   .action( () => {
-    let name = _.has(program.args[0], 'name') ? program.args[0].name : undefined
-    create(name)
-  } )
-
+    //let name = _.has(program.args[0], 'name') ? program.args[0].name : undefined
+    let type = _.has(program.args[0], 'type') ? program.args[0].type : undefined
+    create(type)
+    //process.exit(0)
+  })
+/*
 program
   .command('remove')
   .alias('rm')
@@ -74,7 +73,7 @@ program
   .alias('unbak')
   .description('Restore SSH key ...')
   .action( restore )
-
+*/
 // Parse and fallback to help if no args
 if (_.isEmpty(program.parse(process.argv).args) && process.argv.length === 2) {
   program.help()

@@ -23,6 +23,11 @@ module.exports = () => {
     if (opts.Port && opts.Port != 22) {
       remoteHost += `:${opts.Port}`
     }
-    runscript(`ssh-copy-id -i ${opts.IdentityFile}.pub ${remoteHost}`)
+    if (process.env.OS === 'Windows_NT') {
+      runscript(`type ${opts.IdentityFile}.pub | ssh ${remoteHost} "cat >> .ssh/authorized_keys"`)
+    }
+    else {
+      runscript(`ssh-copy-id -i ${opts.IdentityFile}.pub ${remoteHost}`)
+    }
   })
 }
