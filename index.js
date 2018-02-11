@@ -4,6 +4,7 @@
 const program = require('commander')
 const _ = require('lodash')
 const path = require('path')
+const unzip = require('unzip')
 const pkg = require('./package.json')
 const { init, list, create, remove, upload, connect, backup, restore } = require('./build/main')
 const version = pkg.version

@@ -30,7 +30,6 @@
     "unzip": "^0.1.11"
   },
   "devDependencies": {
-    "babel-plugin-transform-remove-strict-mode": "^0.0.2",
     "backpack-core": "^0.5.0"
   },
   "repository": "https://github.com/thondery/kenote-ssh-cli.git",
