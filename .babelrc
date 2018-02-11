@@ -3,5 +3,8 @@
     "backpack-core/babel",
     "env"
   ],
-  "plugins": ["transform-class-properties"]
+  "plugins": [
+    "transform-class-properties",
+    "transform-remove-strict-mode"
+  ]
 }

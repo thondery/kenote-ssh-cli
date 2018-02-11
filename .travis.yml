@@ -1,8 +1,0 @@
-language: node_js
-node_js:
-  - stable
-  - 8
-sudo: false
-script: 
-  - npm run-script test-ci
-  - npm run report-coverage

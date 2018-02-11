@@ -5,7 +5,7 @@ import inquirer from 'inquirer'
 import runscript from 'runscript'
 import ora from 'ora'
 import _ from 'lodash'
-import { SSH_PATH, SSH_CONF, SSH_CONFILE, KSSH_CONF, gitCommit, saveSSHConf, HOMEPATH } from './base'
+import { SSH_PATH, SSH_CONF, SSH_CONFILE, KSSH_CONF, gitCommit, saveSSHConf, HOMEPATH, toAliasPath } from './base'
 
 export default (type) => {
   let options = null
@@ -31,7 +31,7 @@ export default (type) => {
       HostName: options.host,
       User: options.user,
       ...options.port !== 22 ? { Port: options.port } : null,
-      IdentityFile: path.resolve(SSH_PATH, options.name).replace(new RegExp(`^(${HOMEPATH})`), '~')
+      IdentityFile: toAliasPath(path.resolve(SSH_PATH, options.name))
     }
     let newSSHConf = SSH_CONF
     let successTag = 'create'

@@ -5,7 +5,7 @@ const program = require('commander')
 const _ = require('lodash')
 const path = require('path')
 const pkg = require('./package.json')
-const { init, list, create } = require('./build/main')
+const { init, list, create, remove, upload, connect, backup, restore } = require('./build/main')
 const version = pkg.version
 const basename = path.basename(process.env._ || process.title.replace(/^(\S+)(\s\-\s)(\S+)$/, '$3'))
 
@@ -33,16 +33,12 @@ program
 program
   .command('create')
   .alias('add')
-  //.option('-n, --name <ssh-name>', 'Input SSH key name')
   .option('-t, --type <ssh-type>', 'Input SSH key type')
   .description('Create a new SSH key')
   .action( () => {
-    //let name = _.has(program.args[0], 'name') ? program.args[0].name : undefined
-    let type = _.has(program.args[0], 'type') ? program.args[0].type : undefined
-    create(type)
-    //process.exit(0)
+    create(program.args[0].type)
   })
-/*
+
 program
   .command('remove')
   .alias('rm')
@@ -52,7 +48,7 @@ program
 
 program
   .command('upload')
-  .alias('up')
+  .alias('copy')
   .description('Upload SSH key to the server')
   .action( upload )
 
@@ -73,7 +69,7 @@ program
   .alias('unbak')
   .description('Restore SSH key ...')
   .action( restore )
-*/
+
 // Parse and fallback to help if no args
 if (_.isEmpty(program.parse(process.argv).args) && process.argv.length === 2) {
   program.help()

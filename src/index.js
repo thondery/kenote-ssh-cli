@@ -1,3 +1,8 @@
 export { default as init } from './init'
 export { default as list } from './list'
 export { default as create } from './create'
+export { default as remove } from './remove'
+export { default as upload } from './upload'
+export { default as connect } from './connect'
+export { default as backup } from './backup'
+export { default as restore } from './restore'

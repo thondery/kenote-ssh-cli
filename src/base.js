@@ -5,13 +5,13 @@ import ini from 'ini'
 import _ from 'lodash'
 
 
-export const HOMEPATH = process.env.HOME || process.env.HOMEPATH
+export const HOMEPATH = process.env.HOME || `${process.env.HOMEDRIVE}${process.env.HOMEPATH}`
 export const SSH_PATH = path.resolve(HOMEPATH, '.ssh')
 export const KSSH_PATH = path.resolve(HOMEPATH, '.kssh')
 export const SSH_CONFILE = path.resolve(SSH_PATH, 'config')
 export const KSSH_CONFILE = path.resolve(KSSH_PATH, 'config')
 export const SSH_CONFHEAD = `# SSH Configure\n`
-export const KSSH_CONFHEAD = `; KSSH Configure\n`
+export const KSSH_CONFHEAD = `; KSSH Configure\n\n`
 
 export const tableStyle = {
   borderStyle : 2,
@@ -110,3 +110,13 @@ export const saveSSHConf = (config) => {
   }
   fs.writeFileSync(SSH_CONFILE, infoData, 'utf-8')
 }
+
+export const toFullPath = (name) => {
+  let arr = name.split('~/')
+  if (arr.length > 1) {
+    arr[0] = HOMEPATH
+  }
+  return path.resolve(...arr)
+}
+
+export const toAliasPath = (name) => name.replace(HOMEPATH, '~').replace(/\\/g, '/')
